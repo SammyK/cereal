@@ -55,13 +55,4 @@ Made internal cereal #7
 Made internal cereal #8
 Made internal cereal #9
 Made internal cereal #10
-Freeing cereal #10 (%s)
-Freeing cereal #9 (%s)
-Freeing cereal #8 (%s)
-Freeing cereal #7 (%s)
-Freeing cereal #6 (%s)
-Freeing cereal #5 (%s)
-Freeing cereal #4 (%s)
-Freeing cereal #3 (%s)
-Freeing cereal #2 (%s)
-Freeing cereal #1 (%s)
+Freeing cereals one at a time (%s)

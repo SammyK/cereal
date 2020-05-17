@@ -9,7 +9,7 @@
 #include "php_cereal.h"
 #include "cereal_arginfo.h"
 
-#define CEREAL_ARENA_SIZE 1024 // TODO Figure out how much we need
+#define CEREAL_ARENA_SIZE 1024 * 32 // TODO Figure out how much we need
 
 ZEND_DECLARE_MODULE_GLOBALS(cereal)
 
@@ -109,16 +109,29 @@ static PHP_RINIT_FUNCTION(cereal)
 static PHP_RSHUTDOWN_FUNCTION(cereal)
 {
 	if (CEREAL_G(use_arena) == 1) {
+#if 0
+		ptrdiff_t bytes = 0;
+		zend_arena *a = cereal_arena;
+		while (a) {
+			bytes += ((char *) a->end) - ((char *) a->ptr);
+			a = a->prev;
+		}
+		php_printf("Arena size: %td bytes\n", bytes);
+#endif
 		php_printf("Freeing arena (%p)\n", cereal_arena);
 		zend_arena_destroy(cereal_arena);
 		cereal_arena = NULL;
 	} else {
 		cereal_obj *c = cereals;
 		cereal_obj *tmp;
+		
+		if (c) {
+			php_printf("Freeing cereals one at a time (%p)\n", c);
+		}
 
 		while (c) {
 			tmp = c->prev;
-			php_printf("Freeing cereal #%lu (%p)\n", (unsigned long) c->obj->handle, c);
+			//php_printf("Freeing cereal #%lu (%p)\n", (unsigned long) c->obj->handle, c);
 			GC_DELREF(c->obj);
 			zend_object_std_dtor(c->obj);
 			efree(c);
